@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import models, { sequelize } from "./models/index.js";
 import routes from "./routes/index.js";
+import userService from "./services/userService.js";
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.use((req, res, next) => {
 app.use(async (req, res, next) => {
   req.context = {
     models,
-    me: await models.User.findByLogin("rwieruch"),
+    me: await userService.getUserByLogin("rwieruch"),
   };
   next();
 });

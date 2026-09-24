@@ -3,7 +3,7 @@ import cors from "cors";
 import express from "express";
 import models, { sequelize } from "./models/index.js";
 import routes from "./routes/index.js";
-import userService from "./services/userService.js";
+import middlewares from "./middlewares/index.js";
 
 const app = express();
 
@@ -13,19 +13,8 @@ app.set("trust proxy", true);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// middleware the logs
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path} - ${req.ip}`);
-  next();
-});
-// middleware de autenticação "fake" + injeção dos models no req.context
-app.use(async (req, res, next) => {
-  req.context = {
-    models,
-    me: await userService.getUserByLogin("rwieruch"),
-  };
-  next();
-});
+app.use(middlewares.logger);
+app.use(middlewares.context);
 
 // rotas
 app.get("/", (req, res) => {
@@ -34,6 +23,9 @@ app.get("/", (req, res) => {
 app.use("/session", routes.session);
 app.use("/users", routes.user);
 app.use("/messages", routes.message);
+
+app.use(middlewares.notFound);
+app.use(middlewares.errorHandler);
 
 const port = process.env.PORT || 3000;
 

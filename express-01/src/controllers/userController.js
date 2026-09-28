@@ -2,24 +2,42 @@ import userService from "../services/userService.js";
 
 const getUsers = async (req, res) => {
   const users = await userService.getAllUsers();
-  return res.send(users);
+  return res.status(200).send(users);
 };
 
 const getUser = async (req, res) => {
   const user = await userService.getUserById(req.params.userId);
-  return res.send(user);
+
+  if (!user) {
+    return res.status(404).send({ error: "Usuário não encontrado" });
+  }
+
+  return res.status(200).send(user);
 };
 
-const createUser = (req, res) => {
-  return res.send("POST HTTP method on user resource");
+const createUser = async (req, res) => {
+  const user = await userService.createUser(req.body);
+  return res.status(201).send(user);
 };
 
-const updateUser = (req, res) => {
-  return res.send(`PUT HTTP method on user/${req.params.userId} resource`);
+const updateUser = async (req, res) => {
+  const user = await userService.updateUser(req.params.userId, req.body);
+
+  if (!user) {
+    return res.status(404).send({ error: "Usuário não encontrado" });
+  }
+
+  return res.status(200).send(user);
 };
 
-const deleteUser = (req, res) => {
-  return res.send(`DELETE HTTP method on user/${req.params.userId} resource`);
+const deleteUser = async (req, res) => {
+  const deletedCount = await userService.deleteUser(req.params.userId);
+
+  if (!deletedCount) {
+    return res.status(404).send({ error: "Usuário não encontrado" });
+  }
+
+  return res.status(204).send();
 };
 
 export default {

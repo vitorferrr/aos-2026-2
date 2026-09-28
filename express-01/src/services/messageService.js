@@ -7,11 +7,15 @@ const getMessageById = (id) => messageRepository.findById(id);
 const createMessage = (text, userId) =>
   messageRepository.create({ text, userId });
 
+const updateMessage = (id, text) =>
+  messageRepository.updateById(id, { text });
+
 const deleteMessage = (id) => messageRepository.deleteById(id);
 
 export default {
   getAllMessages,
   getMessageById,
   createMessage,
+  updateMessage,
   deleteMessage,
 };

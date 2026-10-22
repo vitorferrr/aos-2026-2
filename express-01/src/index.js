@@ -12,6 +12,7 @@ app.set("trust proxy", true);
 // middlewares
 app.use(helmet());
 app.use(middlewares.cors);
+app.use(middlewares.limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(middlewares.logger);

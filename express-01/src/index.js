@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { env } from "./utils/env.js";
 import helmet from "helmet";
 import express from "express";
 import models, { sequelize } from "./models/index.js";
@@ -29,9 +30,9 @@ app.use("/messages", routes.message);
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
-const port = process.env.PORT || 3000;
+const port = env.PORT;
 
-const eraseDatabaseOnSync = process.env.ERASE_DATABASE_ON_SYNC === "true";
+const eraseDatabaseOnSync = env.ERASE_DATABASE_ON_SYNC;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {

@@ -1,9 +1,7 @@
+import { env } from "../utils/env.js";
 import cors from "cors";
 
-const allowedOrigins = (
-  process.env.ALLOWED_ORIGINS || "http://localhost:3000,http://localhost:3001"
-)
-  .split(",")
+const allowedOrigins = env.ALLOWED_ORIGINS.split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 

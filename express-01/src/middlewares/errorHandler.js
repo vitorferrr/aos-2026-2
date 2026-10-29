@@ -1,3 +1,4 @@
+import { env } from "../utils/env.js";
 import AppError from "../utils/appError.js";
 
 const handleSequelizeValidationError = (err) => {
@@ -26,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
     message: error.message,
   };
 
-  if (process.env.NODE_ENV === "development") {
+  if (env.NODE_ENV === "development") {
     response.stack = err.stack;
   }
 

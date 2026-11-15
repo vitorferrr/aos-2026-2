@@ -1,16 +1,27 @@
 import sessionService from "../services/sessionService.js";
 
-const login = async (req, res) => {
-  const { login, password } = req.body;
-  const { token, user } = await sessionService.login(login, password);
-
-  return res.status(200).send({
+const sendTokens = (res, { token, refreshToken, user }) =>
+  res.status(200).send({
     status: "success",
     data: {
       token,
+      refreshToken,
       user: { id: user.id, username: user.username, email: user.email },
     },
   });
+
+const login = async (req, res) => {
+  const { login, password } = req.body;
+  return sendTokens(res, await sessionService.login(login, password));
+};
+
+const refresh = async (req, res) => {
+  return sendTokens(res, await sessionService.refresh(req.body.refreshToken));
+};
+
+const logout = async (req, res) => {
+  await sessionService.logout(req.body.refreshToken);
+  return res.status(204).send();
 };
 
 const getSession = async (req, res) => {
@@ -19,5 +30,7 @@ const getSession = async (req, res) => {
 
 export default {
   login,
+  refresh,
+  logout,
   getSession,
 };

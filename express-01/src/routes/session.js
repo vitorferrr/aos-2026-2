@@ -4,8 +4,7 @@ import middlewares from "../middlewares/index.js";
 
 const router = Router();
 
-router.use(middlewares.authLimiter);
-
-router.get("/", sessionController.getSession);
+router.post("/", middlewares.authLimiter, sessionController.login);
+router.get("/", middlewares.auth, sessionController.getSession);
 
 export default router;

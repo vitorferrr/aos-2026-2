@@ -1,3 +1,5 @@
+import argon2 from "argon2";
+
 const getUserModel = (sequelize, { DataTypes }) => {
   const User = sequelize.define("user", {
     username: {
@@ -16,7 +18,32 @@ const getUserModel = (sequelize, { DataTypes }) => {
         notEmpty: true,
       },
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [7, 42],
+      },
+    },
   });
+
+  const hashPassword = async (user) => {
+    if (user.changed("password")) {
+      user.password = await argon2.hash(user.password);
+    }
+  };
+
+  User.beforeCreate(hashPassword);
+  User.beforeUpdate(hashPassword);
+
+  User.prototype.validatePassword = async function (password) {
+    return await argon2.verify(this.password, password);
+  };
+
+  User.prototype.toJSON = function () {
+    const { password, ...values } = this.get();
+    return values;
+  };
 
   User.associate = (models) => {
     User.hasMany(models.Message, { onDelete: "CASCADE" });

@@ -17,7 +17,6 @@ app.use(middlewares.limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(middlewares.logger);
-app.use(middlewares.context);
 
 // rotas
 app.get("/", (req, res) => {
@@ -46,6 +45,7 @@ const createUsersWithMessages = async () => {
     {
       username: "rwieruch",
       email: "rwieruch@email.com",
+      password: "rwieruch123",
       messages: [
         {
           text: "Published the Road to learn React",
@@ -61,6 +61,7 @@ const createUsersWithMessages = async () => {
     {
       username: "ddavids",
       email: "ddavids@email.com",
+      password: "ddavids123",
       messages: [
         {
           text: "Happy to release ...",

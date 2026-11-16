@@ -6,7 +6,12 @@ const sendTokens = (res, { token, refreshToken, user }) =>
     data: {
       token,
       refreshToken,
-      user: { id: user.id, username: user.username, email: user.email },
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
     },
   });
 

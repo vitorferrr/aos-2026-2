@@ -1,4 +1,7 @@
 import userService from "../services/userService.js";
+import AppError from "../utils/appError.js";
+
+const ROLE_ERROR = "Apenas administradores podem alterar perfis de acesso.";
 
 const getUsers = async (req, res) => {
   const users = await userService.getAllUsers();
@@ -16,11 +19,20 @@ const getUser = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  // cadastro público: ninguém pode se autoatribuir um papel
+  if (req.body?.role !== undefined) {
+    throw new AppError(ROLE_ERROR, 403);
+  }
+
   const user = await userService.createUser(req.body);
   return res.status(201).send(user);
 };
 
 const updateUser = async (req, res) => {
+  if (req.body?.role !== undefined && req.context.me.role !== "ADMIN") {
+    throw new AppError(ROLE_ERROR, 403);
+  }
+
   const user = await userService.updateUser(req.params.userId, req.body);
 
   if (!user) {

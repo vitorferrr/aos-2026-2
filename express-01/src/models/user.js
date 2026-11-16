@@ -25,6 +25,11 @@ const getUserModel = (sequelize, { DataTypes }) => {
         len: [7, 42],
       },
     },
+    role: {
+      type: DataTypes.ENUM("USER", "ADMIN"),
+      allowNull: false,
+      defaultValue: "USER",
+    },
   });
 
   const hashPassword = async (user) => {

@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 app.use("/session", routes.session);
 app.use("/users", routes.user);
 app.use("/messages", routes.message);
+app.use("/tarefas", routes.tarefa);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);

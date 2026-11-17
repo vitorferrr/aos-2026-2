@@ -80,6 +80,11 @@ Variáveis de ambiente inválidas ou ausentes:
 | POST   | `/messages`          | Cria uma mensagem.           |
 | PUT    | `/messages/:messageId` | Atualiza uma mensagem.     |
 | DELETE | `/messages/:messageId` | Remove uma mensagem.       |
+| GET    | `/tarefas`           | Lista as tarefas.            |
+| GET    | `/tarefas/:objectId` | Busca uma tarefa.            |
+| POST   | `/tarefas`           | Cria uma tarefa (`descricao` obrigatória, `concluida` opcional). |
+| PUT    | `/tarefas/:objectId` | Atualiza `descricao` e/ou `concluida`. |
+| DELETE | `/tarefas/:objectId` | Remove uma tarefa.           |
 
 ### Estrutura do código
 
@@ -90,8 +95,9 @@ express-01/src
 ├── controllers/     # recebem a requisição e devolvem a resposta
 ├── services/        # regras de negócio
 ├── repositories/    # acesso ao banco de dados
-├── models/          # modelos do Sequelize (User, Message)
-├── middlewares/     # CORS, rate limit, logger, tratamento de erros etc.
+├── models/          # modelos do Sequelize (User, Message, RefreshToken, Tarefa)
+├── schemas/         # schemas Zod de validação das requisições
+├── middlewares/     # CORS, rate limit, validação, logger, tratamento de erros etc.
 └── utils/           # env.js (validação do ambiente) e appError.js
 ```
 

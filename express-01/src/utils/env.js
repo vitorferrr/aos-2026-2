@@ -6,6 +6,10 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   ALLOWED_ORIGINS: z.string().min(1),
   JWT_SECRET: z.string().min(10),
+  SYNC_DATABASE: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
   ERASE_DATABASE_ON_SYNC: z
     .enum(["true", "false"])
     .default("false")

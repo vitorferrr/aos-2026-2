@@ -33,13 +33,22 @@ app.use(middlewares.errorHandler);
 const port = env.PORT;
 
 const eraseDatabaseOnSync = env.ERASE_DATABASE_ON_SYNC;
+const syncDatabase = env.SYNC_DATABASE || eraseDatabaseOnSync;
 
-sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-  if (eraseDatabaseOnSync) {
-    createUsersWithMessages();
-  }
+const startServer = () => {
   app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-});
+};
+
+if (syncDatabase) {
+  sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
+    if (eraseDatabaseOnSync) {
+      await createUsersWithMessages();
+    }
+    startServer();
+  });
+} else {
+  startServer();
+}
 
 const createUsersWithMessages = async () => {
   await models.User.create(
@@ -78,3 +87,5 @@ const createUsersWithMessages = async () => {
     },
   );
 };
+
+export default app;

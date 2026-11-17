@@ -1,0 +1,446 @@
+{
+  "info": {
+    "name": "AOS - API de Tarefas (Vercel)",
+    "description": "Coleção para testar o back-end publicado na Vercel. A URL base está na variável de coleção {{baseUrl}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Tarefas",
+      "item": [
+        {
+          "name": "1. Criar tarefa (POST /tarefas)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set(\"objectId\", pm.response.json().objectId);",
+                  "pm.test(\"objectId é UUID\", function () { pm.expect(pm.response.json().objectId).to.match(/^[0-9a-f-]{36}$/i); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Estudar Zod e Express\",\n  \"concluida\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "2. Listar tarefas (GET /tarefas)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Retorna array\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Buscar tarefa por id (GET /tarefas/:objectId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{objectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas",
+                "{{objectId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. Atualizar tarefa (PUT /tarefas/:objectId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"concluida = true\", function () { pm.expect(pm.response.json().concluida).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{objectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas",
+                "{{objectId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"concluida\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "5. Erro: criar sem descricao (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "6. Erro: id inválido (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas",
+                "abc"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7. Remover tarefa (DELETE /tarefas/:objectId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{objectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas",
+                "{{objectId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "8. Erro: buscar tarefa removida (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tarefas/{{objectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarefas",
+                "{{objectId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sessão e RBAC",
+      "item": [
+        {
+          "name": "1. Login (POST /session)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.collectionVariables.set(\"token\", pm.response.json().data.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/session",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "session"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"rwieruch\",\n  \"password\": \"rwieruch123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "2. Sessão autenticada (GET /session)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/session",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "session"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Sem token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/session",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "session"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. Listar usuários como ADMIN (GET /users)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://aos-2026-2-phi.vercel.app",
+      "type": "string"
+    },
+    {
+      "key": "objectId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
